@@ -2,13 +2,15 @@
 
 Approvals in IssueOps
 
+Heavily based on https://github.com/joshjohanning/approveops
+
 See the following guide on this action: https://josh-ops.com/posts/github-approveops/
 
 ## Usage
 
 ```yml
 - name: ApproveOps - ApproveOps in IssueOps
-  uses: joshjohanning/approveops@v1
+  uses: pdehlke/approveops@v1
   id: check-approval
   with:
     app-id: 170284
@@ -27,9 +29,3 @@ See the following guide on this action: https://josh-ops.com/posts/github-approv
 1. Capture the `APP ID` to use as an input for this action
 
 See the following guide on creating a GitHub app: https://josh-ops.com/posts/github-apps/
-
-## Screenshots
-
-![approveops](https://user-images.githubusercontent.com/19912012/154545687-8d64a775-eec2-4ec7-90dc-901b2d6d39a5.png)
-
-![workflow](https://user-images.githubusercontent.com/19912012/154543171-33551f48-3026-4737-b8b7-7c427a7a8cd8.png)

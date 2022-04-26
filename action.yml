@@ -24,16 +24,16 @@ outputs:
   approved:
     description: "Returns 'true' if the approval command was found in a comment from someone in the approver team, otherwise 'false'"
     value: ${{ steps.check-approval.outputs.approved }}
-    
+
 runs:
   using: "composite"
   steps:
     - uses: tibdex/github-app-token@v1
       id: get_installation_token
-      with: 
+      with:
         app_id: ${{ inputs.app-id }}
         private_key: ${{ inputs.app-private-key }}
-      
+
     - id: check-approval
       name: check if there is an approve command from authorized party
       shell: bash
@@ -66,29 +66,3 @@ runs:
             echo "::error title=Not Approved::There is no /approve command in the comments from someone in the ${{ github.repository_owner }}/${{ inputs.team-name }} team"
         fi
 
-    - if: ${{ steps.check-approval.outputs.approved == 'false' }}
-      name: Create completed comment
-      uses: peter-evans/create-or-update-comment@v1
-      with:
-        token: ${{ steps.get_installation_token.outputs.token }}
-        issue-number: ${{ github.event.issue.number }}
-        body: |
-          Hey, @${{ github.event.comment.user.login }}!
-          :cry:  No one approved your run yet! Have someone from the @${{ github.repository_owner }}/${{ inputs.team-name }} team run `/approve` and then try your command again
-          :no_entry_sign: :no_entry: Marking the workflow run as failed
-
-    - if: ${{ steps.check-approval.outputs.approved == 'true' }}
-      name: Create completed comment
-      uses: peter-evans/create-or-update-comment@v1
-      with:
-        token: ${{ steps.get_installation_token.outputs.token }}
-        issue-number: ${{ github.event.issue.number }}
-        body: |
-          Hey, @${{ github.event.comment.user.login }}!
-          :tada:  You were able to run the migration because someone approved!! :tada:
-
-    # if specified, exit with an error if approval is not found
-    - if: ${{ inputs.fail-if-approval-not-found == 'true' && steps.check-approval.outputs.approved == 'false' }}
-      shell: bash
-      name: exit and error if not approved
-      run: exit 1
