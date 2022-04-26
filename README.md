@@ -10,7 +10,7 @@ See the following guide on this action: https://josh-ops.com/posts/github-approv
 
 ```yml
 - name: ApproveOps - ApproveOps in IssueOps
-  uses: pdehlke/approveops@v1
+  uses: pdehlke/approveops@v2
   id: check-approval
   with:
     app-id: 170284
