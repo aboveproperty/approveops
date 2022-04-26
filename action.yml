@@ -1,4 +1,4 @@
-name: 'ApproveOps - Approvals in IssueOps'
+name: 'ApproverBot - Approvals in IssueOps'
 description: 'IssueOps (ChatOps) workflows that require Approvals from someone in a designated GitHub team'
 
 branding:
@@ -12,7 +12,7 @@ inputs:
   app-private-key:
     description: "Private key for the GitHub App that is installed on the repo; ie: secrets.PRIVATE_KEY"
     required: true
-  app-id: 
+  app-id:
     description: "The GitHub App ID; ie: 170284"
     required: true
   fail-if-approval-not-found:
