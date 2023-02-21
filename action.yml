@@ -19,6 +19,10 @@ inputs:
     description: "Fail the action if the command is not found in the comments from someone in the approver team"
     required: true
     default: 'false'
+  command-name:
+    description: "The name of the approve command, without the slash; ie: approve"
+    required: false
+    default: 'approve'
 
 outputs:
   approved:
@@ -38,11 +42,11 @@ runs:
       name: check if there is an approve command from authorized party
       shell: bash
       run: |
-        # "checking for a /approve command in the comments from someone in the approver team"
+        approveCommand="/${{ inputs.command-name }}"
+        # "checking for a ${{ approveCommand }} command in the comments from someone in the approver team"
         users=$(curl -sLX GET 'https://api.github.com/orgs/${{ github.repository_owner }}/teams/${{ inputs.team-name }}/members' \
           --header "Accept: application/vnd.github.v3+json" \
           --header "Authorization: Bearer ${{ steps.get_installation_token.outputs.token }}" | jq -c '.[].login')
-        approveCommand="/approve"
         comments=$(curl -sLX GET '${{ github.event.comment.issue_url }}/comments' \
           --header "Accept: application/vnd.github.v3+json" \
           --header "Authorization: Bearer ${{ steps.get_installation_token.outputs.token }}")
@@ -63,6 +67,6 @@ runs:
         else
             echo "Approval not found or not authorized"
             echo "::set-output name=approved::false"
-            echo "::error title=Not Approved::There is no /approve command in the comments from someone in the ${{ github.repository_owner }}/${{ inputs.team-name }} team"
+            echo "::error title=Not Approved::There is no ${{ approveCommand }} command in the comments from someone in the ${{ github.repository_owner }}/${{ inputs.team-name }} team"
         fi
 
