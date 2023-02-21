@@ -42,11 +42,11 @@ runs:
       name: check if there is an approve command from authorized party
       shell: bash
       run: |
-        approveCommand="/${{ inputs.command-name }}"
         # "checking for a /${{ inputs.command-name }} command in the comments from someone in the approver team"
         users=$(curl -sLX GET 'https://api.github.com/orgs/${{ github.repository_owner }}/teams/${{ inputs.team-name }}/members' \
           --header "Accept: application/vnd.github.v3+json" \
           --header "Authorization: Bearer ${{ steps.get_installation_token.outputs.token }}" | jq -c '.[].login')
+        approveCommand="/${{ inputs.command-name }}"
         comments=$(curl -sLX GET '${{ github.event.comment.issue_url }}/comments' \
           --header "Accept: application/vnd.github.v3+json" \
           --header "Authorization: Bearer ${{ steps.get_installation_token.outputs.token }}")
