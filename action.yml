@@ -43,7 +43,7 @@ runs:
       shell: bash
       run: |
         approveCommand="/${{ inputs.command-name }}"
-        # "checking for a $approveCommand command in the comments from someone in the approver team"
+        # "checking for a /${{ inputs.command-name }} command in the comments from someone in the approver team"
         users=$(curl -sLX GET 'https://api.github.com/orgs/${{ github.repository_owner }}/teams/${{ inputs.team-name }}/members' \
           --header "Accept: application/vnd.github.v3+json" \
           --header "Authorization: Bearer ${{ steps.get_installation_token.outputs.token }}" | jq -c '.[].login')
@@ -67,6 +67,6 @@ runs:
         else
             echo "Approval not found or not authorized"
             echo "::set-output name=approved::false"
-            echo "::error title=Not Approved::There is no $approveCommand command in the comments from someone in the ${{ github.repository_owner }}/${{ inputs.team-name }} team"
+            echo "::error title=Not Approved::There is no /${{ inputs.command-name }} command in the comments from someone in the ${{ github.repository_owner }}/${{ inputs.team-name }} team"
         fi
 
